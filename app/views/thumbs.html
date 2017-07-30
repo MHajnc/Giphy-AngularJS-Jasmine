@@ -1,0 +1,67 @@
+<article class="content__container">
+  <nav class="categories-navigation">
+    <ul class="categories-navigation__list">
+      <li class="categories-navigation__button"
+          ng-repeat="cKey in keywords"
+          ng-class="{'categories-navigation__botton--selected' : currKeyword == cKey}"
+          ng-click="switchKeyword(cKey)"
+      >
+        {{cKey}}
+      </li>
+    </ul>
+    <div class="float__clear"></div>
+  </nav>
+  <section class="thumb">
+    <div ng-repeat="cGif in gifsList" 
+         class="thumb__container"
+         ng-init="imgsrc=cGif.images.fixed_height_small_still.url" 
+         ng-mouseover="imgsrc=cGif.images.fixed_height_small.url" 
+         ng-mouseout="imgsrc=cGif.images.fixed_height_small_still.url"
+         ng-click="showImgPopup(cGif)"
+    >
+      <img class = "thumb__container__image" ng-src="{{imgsrc}}" />
+      <div class="thumb__mask"></div>
+    </div>
+    <div class="float__clear"></div>
+
+    <div ng-if="errorInfo">
+      {{errorInfo}}
+    </div>
+
+    <div ng-if="gifsList">
+      <div title="See previous" 
+           class="navigation-button float__left" 
+           ng-click="getListPart(-1)" 
+           ng-if="gifsListOffset > 0" 
+      >
+        &lt;
+      </div>
+      <div title="Take next" 
+           class="navigation-button float__right" 
+           ng-click="getListPart(1)" 
+           ng-if="gifsListOffset + thumbLimit < gifsListTotalCount"
+      >
+        &gt;
+      </div>
+    </div>
+  </section>
+  <div class="float__clear"></div>
+</article>
+
+<modal-dialog show='currGifObj' on-close='onVideoClose()'>
+  <div class="modal_Content" ng-if="currGifObj">
+    <video id="vid-player"
+           class="ng-modal__vid-player"
+           controls autoplay loop 
+           ng-src="{{currGifObj.images.original.mp4 | trusted}}"
+           type="video/mp4"
+           width="{{currGifObj.images.original.width}}" 
+           height="{{currGifObj.images.original.height}}"
+    >
+      <img ng-src="{{currGifObj.images.original.url | trusted}}" 
+           width="{{currGifObj.images.original.width}}" 
+           height="{{currGifObj.images.original.height}}"
+      />
+    </video>
+  </div>
+</modal-dialog>
